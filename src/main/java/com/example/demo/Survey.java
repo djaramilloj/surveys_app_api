@@ -11,9 +11,9 @@ public class Survey {
   @GeneratedValue(strategy=GenerationType.AUTO)
   private Integer id;
 
-  private Integer document_number;
+  private String documentNumber;
 
-  private Integer pc_brand_id;
+  private String pcBrandId;
 
   private String email;
 
@@ -29,12 +29,12 @@ public class Survey {
     this.id = id;
   }
 
-  public Integer getDoc() {
-    return document_number;
+  public String getDoc() {
+    return documentNumber;
   }
 
-  public void setDoc(Integer document_number) {
-    this.document_number = document_number;
+  public void setDoc(String documentNumber) {
+    this.documentNumber = documentNumber;
   }
 
   public String getEmail() {
@@ -45,19 +45,19 @@ public class Survey {
     this.email = email;
   }
 
-   public Integer getBrand() {
-    return pc_brand_id;
+   public String getBrand() {
+    return pcBrandId;
   }
 
-  public void setBrand(Integer pc_brand_id) {
-    this.pc_brand_id = pc_brand_id;
+  public void setBrand(String pcBrandId) {
+    this.pcBrandId = pcBrandId;
   }
 
   public String getComments() {
     return comments;
   }
 
-  public void setCommenys(String comments) {
+  public void setComments(String comments) {
     this.comments = comments;
   }
 

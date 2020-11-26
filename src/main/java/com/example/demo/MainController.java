@@ -15,16 +15,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 
+
 @Controller
 public class MainController {
 	@Autowired
 
+	private SurveyRepository surveyRepository;
 	private UserRepository userRepository;
 
+
 	@PostMapping(path="/auth/signup")
-	// FALTA TIMESTAMP
 	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody User signUp (@RequestBody User user) {
+	public @ResponseBody ResponseAPI signUp (@RequestBody User user) {
 		String plainPassword = user.getPassword();
 		String bodyName = user.getName();
 		String bodyEmail = user.getEmail();
@@ -37,7 +39,10 @@ public class MainController {
 		newUser.setEmail(bodyEmail);
 		newUser.setPassword(encodedPassword);
 		userRepository.save(newUser);
-		return newUser;
+		ResponseAPI response = new ResponseAPI();
+		response.setStatus(201);
+		response.setMessage("User created");
+		return response;
 	}
 
 	@PostMapping(path="/auth/login")
@@ -61,10 +66,37 @@ public class MainController {
 		return result;
 	}
 
-	// @GetMapping("/hello")
-	// public @ResponseBody Iterable<User> getAllUsers() {
-    // 	return userRepository.findAll();
-  	// }
+	@PostMapping(path="/main/survey")
+	// make a survey
+	public @ResponseBody ResponseAPI sendSurvey (@RequestBody Survey surveySent) {
+		String documentNumber = surveySent.getDoc();
+		String pcBrandId = surveySent.getBrand();
+		String email = surveySent.getEmail();
+		String comments = surveySent.getComments();
+		ResponseAPI response = new ResponseAPI();
+		if (documentNumber == null || pcBrandId == null || email == null || comments == null) {
+			response.setStatus(400);
+			response.setMessage("Incomplete Information");
+			return response;
+		} else {
+			Survey survey = new Survey();
+			survey.setDoc(documentNumber);
+			survey.setEmail(email);
+			survey.setBrand(pcBrandId);
+			survey.setComments(comments);
+			surveyRepository.save(survey);
+			response.setStatus(201);
+			response.setMessage("Survey Sent");
+			return response;
+		}
 
+	}
+
+	@GetMapping("/main/getsurvey")
+	public @ResponseBody Iterable<Survey> getAllSurveys(@RequestParam String email) {
+		Iterable<Survey> result = surveyRepository.findByEmail(email);
+		return result;
+	}
 }
+
             
