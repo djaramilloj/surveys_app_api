@@ -17,7 +17,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin
 @Controller
 public class MainController {
 	@Autowired
