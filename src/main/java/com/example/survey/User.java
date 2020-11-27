@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.survey;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,11 +13,21 @@ public class User {
 
   private String name;
 
-  private String email;
+  public String email;
 
   private String securePassword;
 
   private Integer created;
+
+
+  public User() {}
+
+  public User(String name, String email, String securePassword) {
+      this.name = name;
+      this.email = email;
+      this.securePassword = securePassword;
+  }
+
 
   public Integer getId() {
     return id;

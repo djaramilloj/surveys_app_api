@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.survey;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,9 +11,9 @@ public class Survey {
   @GeneratedValue(strategy=GenerationType.AUTO)
   private Integer id;
 
-  private String documentNumber;
+  private Integer documentNumber;
 
-  private String pcBrandId;
+  private Integer pcBrandId;
 
   private String email;
 
@@ -29,11 +29,11 @@ public class Survey {
     this.id = id;
   }
 
-  public String getDoc() {
+  public Integer getDoc() {
     return documentNumber;
   }
 
-  public void setDoc(String documentNumber) {
+  public void setDoc(Integer documentNumber) {
     this.documentNumber = documentNumber;
   }
 
@@ -45,11 +45,11 @@ public class Survey {
     this.email = email;
   }
 
-   public String getBrand() {
+   public Integer getBrand() {
     return pcBrandId;
   }
 
-  public void setBrand(String pcBrandId) {
+  public void setBrand(Integer pcBrandId) {
     this.pcBrandId = pcBrandId;
   }
 

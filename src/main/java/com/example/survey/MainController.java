@@ -1,7 +1,8 @@
 
-package com.example.demo;
+package com.example.survey;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,17 +20,34 @@ import org.springframework.http.ResponseEntity;
 @Controller
 public class MainController {
 	@Autowired
-
-	private SurveyRepository surveyRepository;
 	private UserRepository userRepository;
 
+	@Autowired
+	private SurveyRepository surveyRepository;
 
+	@Autowired
+	private BrandRepository brandRepository;
+
+	@CrossOrigin(origins = "https://survey-front.web.app")
 	@PostMapping(path="/auth/signup")
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody ResponseAPI signUp (@RequestBody User user) {
+		ResponseAPI response = new ResponseAPI();
 		String plainPassword = user.getPassword();
 		String bodyName = user.getName();
 		String bodyEmail = user.getEmail();
+		// check if user already exists
+		User result = userRepository.findByEmail(bodyEmail);
+		if (result != null) {
+			response.setStatus(403);
+			response.setMessage("Email already exists");
+			return response;
+		} 
+		if (bodyName == null || bodyEmail == null || plainPassword == null) {
+			response.setStatus(400);
+			response.setMessage("Incomplete Information");
+			return response;
+		}
 		// encode password
 		int strength = 5;
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength);
@@ -39,14 +57,15 @@ public class MainController {
 		newUser.setEmail(bodyEmail);
 		newUser.setPassword(encodedPassword);
 		userRepository.save(newUser);
-		ResponseAPI response = new ResponseAPI();
 		response.setStatus(201);
 		response.setMessage("User created");
 		return response;
 	}
 
+	@CrossOrigin(origins = "https://survey-front.web.app")
 	@PostMapping(path="/auth/login")
-	public @ResponseBody User logIn (@RequestBody User user) {
+	public @ResponseBody ResponseAPI  logIn (@RequestBody User user) {
+		ResponseAPI response = new ResponseAPI();
 		String plainPassword = user.getPassword();
 		String bodyEmail = user.getEmail();
 		User result = userRepository.findByEmail(bodyEmail);
@@ -55,22 +74,32 @@ public class MainController {
 			int strength = 5;
 			BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength);
 			boolean passwordMatch = bCryptPasswordEncoder.matches(plainPassword, result.getPassword());
-			System.out.println(passwordMatch);
 			if(passwordMatch) {
 				var cookie = ResponseCookie.from("email", result.getEmail()).build();
 				ResponseEntity.ok()
 					.header(HttpHeaders.SET_COOKIE, cookie.toString())
 					.build();
+				response.setStatus(200);
+				response.setMessage(result.email);
+				return response;
+			} else {
+				response.setStatus(403);
+				response.setMessage("Password Incorrect");
+				return response;
 			}
+		} else {
+			response.setStatus(403);
+			response.setMessage("Email not found");
+			return response;
 		}
-		return result;
 	}
 
+	@CrossOrigin(origins = "https://survey-front.web.app")
 	@PostMapping(path="/main/survey")
 	// make a survey
 	public @ResponseBody ResponseAPI sendSurvey (@RequestBody Survey surveySent) {
-		String documentNumber = surveySent.getDoc();
-		String pcBrandId = surveySent.getBrand();
+		Integer documentNumber = surveySent.getDoc();
+		Integer pcBrandId = surveySent.getBrand();
 		String email = surveySent.getEmail();
 		String comments = surveySent.getComments();
 		ResponseAPI response = new ResponseAPI();
@@ -92,9 +121,17 @@ public class MainController {
 
 	}
 
+	@CrossOrigin(origins = "https://survey-front.web.app")
 	@GetMapping("/main/getsurvey")
 	public @ResponseBody Iterable<Survey> getAllSurveys(@RequestParam String email) {
 		Iterable<Survey> result = surveyRepository.findByEmail(email);
+		return result;
+	}
+
+	@CrossOrigin(origins = "https://survey-front.web.app")
+	@GetMapping("/brands")
+	public @ResponseBody Iterable<Brand> getAllSurveys() {
+		Iterable<Brand> result = brandRepository.findAll();
 		return result;
 	}
 }

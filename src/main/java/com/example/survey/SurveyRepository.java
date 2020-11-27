@@ -1,9 +1,9 @@
-package com.example.demo;
+package com.example.survey;
 
 // import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.Survey;
+import com.example.survey.Survey;
 
 public interface SurveyRepository extends JpaRepository<Survey, Integer> {
 
