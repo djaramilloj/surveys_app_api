@@ -28,7 +28,7 @@ public class MainController {
 	@Autowired
 	private BrandRepository brandRepository;
 
-	@CrossOrigin(origins = "https://survey-front.web.app")
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping(path="/auth/signup")
 	@ResponseStatus(HttpStatus.CREATED)
 	public @ResponseBody ResponseAPI signUp (@RequestBody User user) {
@@ -62,7 +62,7 @@ public class MainController {
 		return response;
 	}
 
-	@CrossOrigin(origins = "https://survey-front.web.app")
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping(path="/auth/login")
 	public @ResponseBody ResponseAPI  logIn (@RequestBody User user) {
 		ResponseAPI response = new ResponseAPI();
@@ -94,7 +94,7 @@ public class MainController {
 		}
 	}
 
-	@CrossOrigin(origins = "https://survey-front.web.app")
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping(path="/main/survey")
 	// make a survey
 	public @ResponseBody ResponseAPI sendSurvey (@RequestBody Survey surveySent) {
@@ -121,14 +121,14 @@ public class MainController {
 
 	}
 
-	@CrossOrigin(origins = "https://survey-front.web.app")
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@GetMapping("/main/getsurvey")
 	public @ResponseBody Iterable<Survey> getAllSurveys(@RequestParam String email) {
 		Iterable<Survey> result = surveyRepository.findByEmail(email);
 		return result;
 	}
 
-	@CrossOrigin(origins = "https://survey-front.web.app")
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@GetMapping("/brands")
 	public @ResponseBody Iterable<Brand> getAllSurveys() {
 		Iterable<Brand> result = brandRepository.findAll();
