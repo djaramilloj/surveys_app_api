@@ -1,25 +1,33 @@
-package com.example.survey;
+package com.example.demo;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Id; 
 
 @Entity
-public class Survey {
+public class User {
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
   private Integer id;
 
-  private Integer documentNumber;
+  private String name;
 
-  private Integer pcBrandId;
+  public String email;
 
-  private String email;
-
-  private String comments;
+  private String securePassword;
 
   private Integer created;
+
+
+  public User() {}
+
+  public User(String name, String email, String securePassword) {
+      this.name = name;
+      this.email = email;
+      this.securePassword = securePassword;
+  }
+
 
   public Integer getId() {
     return id;
@@ -29,12 +37,12 @@ public class Survey {
     this.id = id;
   }
 
-  public Integer getDoc() {
-    return documentNumber;
+  public String getName() {
+    return name;
   }
 
-  public void setDoc(Integer documentNumber) {
-    this.documentNumber = documentNumber;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getEmail() {
@@ -45,20 +53,12 @@ public class Survey {
     this.email = email;
   }
 
-   public Integer getBrand() {
-    return pcBrandId;
+   public String getPassword() {
+    return securePassword;
   }
 
-  public void setBrand(Integer pcBrandId) {
-    this.pcBrandId = pcBrandId;
-  }
-
-  public String getComments() {
-    return comments;
-  }
-
-  public void setComments(String comments) {
-    this.comments = comments;
+  public void setPassword(String securePassword) {
+    this.securePassword = securePassword;
   }
 
   public Integer getCreated() {

@@ -1,4 +1,4 @@
-package com.example.survey;
+package com.example.demo;
 
 public class ResponseAPI {
 
